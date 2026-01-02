@@ -2,12 +2,15 @@ import { Cpu, Globe, Code, Shield } from "lucide-react";
 
 export default function AboutUsPage() {
     return (
-        <div className="container ml-20 px-4 md:px-6 py-12 ml-6">
+        <div className="container mx-auto px-4 md:px-6 py-12">
             {/* Hero Section */}
             <div className="text-center max-w-3xl mx-auto mb-16">
-                <h1 className="text-4xl font-bold tracking-tight mb-4">Built by a Developer, for Developers</h1>
+                <h1 className="text-4xl font-bold tracking-tight mb-4">
+                    Built by a Developer, for Developers
+                </h1>
                 <p className="text-xl text-circuit-text-muted">
-                    CircuitSupply is the passion project of Islam Hossam, dedicated to simplifying component sourcing for the embedded systems community.
+                    CircuitSupply is the passion project of Islam Hossam, dedicated to simplifying component
+                    sourcing for the embedded systems community.
                 </p>
             </div>
 
@@ -18,12 +21,16 @@ export default function AboutUsPage() {
                         <Code className="w-4 h-4" />
                         <span>Solo Developer</span>
                     </div>
-                    <h2 className="text-3xl font-bold">Meet the Maker</h2>
+                    <h2 className="text-3xl font-bold">Meet the Developer</h2>
                     <p className="text-circuit-text-muted leading-relaxed">
-                        Hi, I'm <strong>Islam Hossam</strong>. As a full-stack developer and embedded systems enthusiast, I realized that getting high-quality components often meant dealing with clunky enterprise distributors or unreliable marketplaces.
+                        Hi, I'm <strong>Islam Hossam</strong>. As a full-stack developer and embedded systems
+                        enthusiast, I realized that getting high-quality components often meant dealing with
+                        clunky enterprise distributors or unreliable marketplaces.
                     </p>
                     <p className="text-circuit-text-muted leading-relaxed">
-                        I built CircuitSupply to bridge that gap—offering a curated, developer-friendly experience with modern tooling and reliable sourcing. Every line of code on this platform and every component in the catalog is curated with care.
+                        I built CircuitSupply to bridge that gap—offering a curated, developer-friendly
+                        experience with modern tooling and reliable sourcing. Every line of code on this
+                        platform and every component in the catalog is curated with care.
                     </p>
                 </div>
                 <div className="relative h-[300px] w-full rounded-xl overflow-hidden bg-circuit-bg border border-circuit-border group flex items-center justify-center">
@@ -41,17 +48,24 @@ export default function AboutUsPage() {
                 <div className="bg-circuit-card border border-circuit-border rounded-lg p-6 hover:border-circuit-green/50 transition-colors">
                     <Globe className="w-10 h-10 text-circuit-green mb-4" />
                     <h3 className="font-bold text-lg mb-2">Curated Selection</h3>
-                    <p className="text-sm text-circuit-text-muted">I personally verify the specs of every component listed to ensure it meets engineering standards.</p>
+                    <p className="text-sm text-circuit-text-muted">
+                        I personally verify the specs of every component listed to ensure it meets engineering
+                        standards.
+                    </p>
                 </div>
                 <div className="bg-circuit-card border border-circuit-border rounded-lg p-6 hover:border-circuit-green/50 transition-colors">
                     <Cpu className="w-10 h-10 text-circuit-blue mb-4" />
                     <h3 className="font-bold text-lg mb-2">Technical Depth</h3>
-                    <p className="text-sm text-circuit-text-muted">Detailed datasheets and pinout diagrams provided for every microcontroller and sensor.</p>
+                    <p className="text-sm text-circuit-text-muted">
+                        Detailed datasheets and pinout diagrams provided for every microcontroller and sensor.
+                    </p>
                 </div>
                 <div className="bg-circuit-card border border-circuit-border rounded-lg p-6 hover:border-circuit-green/50 transition-colors">
                     <Shield className="w-10 h-10 text-purple-500 mb-4" />
                     <h3 className="font-bold text-lg mb-2">Transparency</h3>
-                    <p className="text-sm text-circuit-text-muted">Direct support channel. No chatbots, just direct communication with the developer.</p>
+                    <p className="text-sm text-circuit-text-muted">
+                        Direct support channel. No chatbots, just direct communication with the developer.
+                    </p>
                 </div>
             </div>
         </div>

@@ -3,7 +3,7 @@ import { Mail, Phone, MessageSquare } from "lucide-react";
 
 export default function ContactPage() {
     return (
-        <div className="container ml-25 px-4 md:px-6 py-12 ml-6">
+        <div className="container mx-auto px-4 md:px-6 py-12">
             <div className="text-center max-w-2xl mx-auto mb-12">
                 <h1 className="text-4xl font-bold tracking-tight mb-4">Contact the Developer</h1>
                 <p className="text-circuit-text-muted">
@@ -21,8 +21,18 @@ export default function ContactPage() {
                         <div className="ml-4">
                             <h3 className="font-semibold text-lg">Email</h3>
                             <div className="text-circuit-text-muted mt-1 space-y-1">
-                                <a href="mailto:IslamHossamDev@outlook.com" className="block hover:text-circuit-green transition-colors">IslamHossamDev@outlook.com</a>
-                                <a href="mailto:IslamHossamIHB@gmail.com" className="block hover:text-circuit-green transition-colors">IslamHossamIHB@gmail.com</a>
+                                <a
+                                    href="mailto:IslamHossamDev@outlook.com"
+                                    className="block hover:text-circuit-green transition-colors"
+                                >
+                                    IslamHossamDev@outlook.com
+                                </a>
+                                <a
+                                    href="mailto:IslamHossamIHB@gmail.com"
+                                    className="block hover:text-circuit-green transition-colors"
+                                >
+                                    IslamHossamIHB@gmail.com
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -34,7 +44,12 @@ export default function ContactPage() {
                         <div className="ml-4">
                             <h3 className="font-semibold text-lg">Phone</h3>
                             <p className="text-circuit-text-muted mt-1">
-                                <a href="tel:+201503157915" className="hover:text-circuit-green transition-colors">+20 150 315 7915</a>
+                                <a
+                                    href="tel:+201503157915"
+                                    className="hover:text-circuit-green transition-colors"
+                                >
+                                    +20 150 315 7915
+                                </a>
                             </p>
                             <p className="text-xs text-circuit-text-muted mt-1">Available on WhatsApp</p>
                         </div>
@@ -57,11 +72,19 @@ export default function ContactPage() {
                         <div className="grid sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Name</label>
-                                <input type="text" className="w-full rounded-md border border-circuit-border bg-circuit-bg px-3 py-2 text-sm focus:border-circuit-green outline-none" placeholder="Your Name" />
+                                <input
+                                    type="text"
+                                    className="w-full rounded-md border border-circuit-border bg-circuit-bg px-3 py-2 text-sm focus:border-circuit-green outline-none"
+                                    placeholder="Your Name"
+                                />
                             </div>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Email</label>
-                                <input type="email" className="w-full rounded-md border border-circuit-border bg-circuit-bg px-3 py-2 text-sm focus:border-circuit-green outline-none" placeholder="you@example.com" />
+                                <input
+                                    type="email"
+                                    className="w-full rounded-md border border-circuit-border bg-circuit-bg px-3 py-2 text-sm focus:border-circuit-green outline-none"
+                                    placeholder="you@example.com"
+                                />
                             </div>
                         </div>
 
@@ -77,10 +100,16 @@ export default function ContactPage() {
 
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Message</label>
-                            <textarea rows={5} className="w-full rounded-md border border-circuit-border bg-circuit-bg px-3 py-2 text-sm focus:border-circuit-green outline-none" placeholder="How can I help you?"></textarea>
+                            <textarea
+                                rows={5}
+                                className="w-full rounded-md border border-circuit-border bg-circuit-bg px-3 py-2 text-sm focus:border-circuit-green outline-none"
+                                placeholder="How can I help you?"
+                            />
                         </div>
 
-                        <Button variant="default" className="w-full sm:w-auto">Send Message</Button>
+                        <Button variant="default" className="w-full sm:w-auto">
+                            Send Message
+                        </Button>
                     </form>
                 </div>
             </div>
