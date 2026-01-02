@@ -18,7 +18,7 @@ export default function CartPage() {
         return (
             <div className="container py-24 text-center">
                 <h1 className="text-2xl font-bold mb-4">Your cart is empty</h1>
-                <p className="text-circuit-text-muted mb-8">Looks like you haven't added any components yet.</p>
+                <p className="text-circuit-text-muted mb-8">Looks like you havent added any components yet.</p>
                 <Link href="/product">
                     <Button variant="default">Browse Products</Button>
                 </Link>
