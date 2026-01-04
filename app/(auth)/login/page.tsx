@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
 import { authApi } from "@/lib/api";
 import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function LoginPage() {
     const [formData, setFormData] = useState({ email: "", password: "" });
@@ -90,7 +91,8 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="min-h-screen flex bg-circuit-bg">
+        <Suspense>
+            <div className="min-h-screen flex bg-circuit-bg">
             {/* Left Side - Form */}
             <div className="w-full lg:w-1/2 flex items-center justify-center p-8 relative">
                 <div className="absolute top-8 left-8">
@@ -193,5 +195,6 @@ export default function LoginPage() {
                 </div>
             </div>
         </div>
+        </Suspense>
     );
 }
