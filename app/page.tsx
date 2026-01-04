@@ -2,11 +2,15 @@ import { Button } from "@/components/ui/Button";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { ArrowRight, Cpu, Zap, Activity, Box } from "lucide-react";
 import Link from "next/link";
-import { productApi } from "@/lib/api";
+import { getProductsForFrontend } from "@/lib/api"; // ✅ FIX: Import transformer
+import type { Product } from "@/lib/api"; // ✅ Ensure correct type
 
 export default async function Home() {
-  const trendingProducts = await productApi.getTrending(4);
-  const featuredProducts = trendingProducts.responseObj || [];
+  // ❌ DON'T USE raw GetProductDTO
+  // const trendingProducts = await productApi.getTrending(4);
+
+  // ✅ USE frontend-safe transformed products
+  const featuredProducts: Product[] = await getProductsForFrontend();
 
   return (
     <div className="flex flex-col gap-16 w-full">
@@ -78,7 +82,9 @@ export default async function Home() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h2 className="text-3xl font-bold tracking-tight">Trending Components</h2>
-            <p className="text-circuit-text-muted mt-2">Most popular picks for this week&apos;s prototyping designs.</p>
+            <p className="text-circuit-text-muted mt-2">
+              Most popular picks for this week&apos;s prototyping designs.
+            </p>
           </div>
           <Link
             href="/product"
@@ -87,6 +93,7 @@ export default async function Home() {
             View All Components
           </Link>
         </div>
+
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featuredProducts.map((product) => (
             <ProductCard key={product.id} product={product} />
@@ -113,9 +120,6 @@ export default async function Home() {
             </div>
           </div>
         </div>
-      </section>
-      <section className="container mx-auto px-4 md:px-6">
-
       </section>
     </div>
   );

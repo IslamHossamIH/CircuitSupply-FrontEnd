@@ -7,9 +7,11 @@ interface User {
     token: string;
     expiration: string;
     role: string;
+    id: number;
     userId: number;
     userName: string;
-    email?: string; // Optional as it's not in LoginResponseDTO directly but might be useful
+    email?: string;
+    name?: string; // Optional as it's not in LoginResponseDTO directly but might be useful
 }
 
 interface AuthContextType {

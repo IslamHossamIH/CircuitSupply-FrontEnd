@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/Navbar";
@@ -48,9 +49,11 @@ export default function RootLayout({
             <CartProvider>
               <div className="fixed inset-0 grid-bg -z-10 opacity-20 pointer-events-none"></div>
               <Navbar />
-              <main className="flex-1">
-                {children}
-              </main>
+              <Suspense>
+                <main className="flex-1">
+                  {children}
+                </main>
+              </Suspense>
               <Footer />
             </CartProvider>
           </AuthProvider>
