@@ -5,20 +5,47 @@ import Link from "next/link";
 import { ArrowLeft, Cpu } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/components/auth-provider";
+import { authApi } from "@/lib/api";
 
 export default function RegisterPage() {
-    const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", password: "" });
+    const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "", password: "", phoneNumber: "", address: "" });
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState("");
     const { login } = useAuth();
 
-    const handleRegister = (e: React.FormEvent) => {
+    const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate network delay
-        setTimeout(() => {
-            const name = `${formData.firstName} ${formData.lastName} `.trim() || formData.email.split('@')[0];
-            login(formData.email, name);
-        }, 1000);
+        setError("");
+
+        try {
+            const response = await authApi.signup({
+                firstName: formData.firstName,
+                lastName: formData.lastName,
+                email: formData.email,
+                password: formData.password,
+                phoneNumber: formData.phoneNumber,
+                address: formData.address
+            });
+            const token = response.responseObj.token;
+            const email = response.responseObj.email || formData.email;
+            const id = response.responseObj.id;
+            const name = email.split("@")[0];
+            login({
+                email,
+                name,
+                token,
+                role: "Customer",
+                id: id,
+                userId: id,
+                userName: name,
+                expiration: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString()
+            });
+        } catch (err: any) {
+            setError(err.message || "Registration failed. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,6 +72,11 @@ export default function RegisterPage() {
                     </div>
 
                     <form className="space-y-4" onSubmit={handleRegister}>
+                        {error && (
+                            <div className="p-3 text-sm text-red-500 bg-red-500/10 border border-red-500/20 rounded-md">
+                                {error}
+                            </div>
+                        )}
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <label className="block text-sm font-medium text-circuit-text">First Name</label>
@@ -89,6 +121,18 @@ export default function RegisterPage() {
                                 value={formData.password}
                                 onChange={handleChange}
                                 placeholder="Create a password"
+                                className="w-full h-11 rounded-md border border-circuit-border bg-circuit-card px-3 text-sm text-circuit-text focus:border-circuit-green focus:outline-none focus:ring-1 focus:ring-circuit-green transition-all"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="block text-sm font-medium text-circuit-text">PhoneNumber</label>
+                            <input
+                                type="tel"
+                                name="phoneNumber"
+                                required
+                                value={formData.phoneNumber}
+                                onChange={handleChange}
+                                placeholder="Add Phone Number"
                                 className="w-full h-11 rounded-md border border-circuit-border bg-circuit-card px-3 text-sm text-circuit-text focus:border-circuit-green focus:outline-none focus:ring-1 focus:ring-circuit-green transition-all"
                             />
                         </div>

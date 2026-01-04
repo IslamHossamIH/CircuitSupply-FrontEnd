@@ -36,7 +36,7 @@ export default function CartPage() {
                     {items.map((item) => (
                         <div key={item.product.id} className="flex gap-4 p-4 bg-circuit-card border border-circuit-border rounded-lg">
                             <div className="relative w-24 h-24 bg-circuit-bg rounded-md overflow-hidden flex-shrink-0">
-                                <Image src={item.product.image} alt={item.product.name} fill className="object-cover" />
+                                <Image src={item.product.image} unoptimized alt={item.product.name} fill className="object-cover" />
                             </div>
                             <div className="flex-1 flex flex-col justify-between">
                                 <div className="flex justify-between items-start">
@@ -92,17 +92,19 @@ export default function CartPage() {
                                 <span>Shipping</span>
                                 <span>{shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}</span>
                             </div>
-                            <div className="flex justify-between font-bold text-lg pt-4 border-t border-circuit-border mt-4">
-                                <span>Total</span>
-                                <span>${total.toFixed(2)}</span>
-                            </div>
                         </div>
 
-                        <Link href="/checkout">
-                            <Button variant="default" className="w-full mt-6">
-                                Proceed to Checkout <ArrowRight className="w-4 h-4 ml-2" />
-                            </Button>
-                        </Link>
+                        <div className="border-t border-circuit-border pt-4">
+                            <div className="flex justify-between items-center mb-6">
+                                <span className="text-lg font-medium">Total</span>
+                                <span className="text-2xl font-bold text-circuit-green">${total.toFixed(2)}</span>
+                            </div>
+                            <Link href="/checkout">
+                                <Button className="w-full h-12 text-lg">
+                                    Proceed to Checkout
+                                </Button>
+                            </Link>
+                        </div>
                         <div className="text-xs text-center text-circuit-text-muted mt-4">
                             Free shipping on orders over $100
                         </div>

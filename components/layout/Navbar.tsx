@@ -2,23 +2,32 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Search, ShoppingCart, Cpu, Menu, User, LogIn } from "lucide-react";
 import { Button } from "../ui/Button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/components/auth-provider";
 import { useCart } from "@/components/cart-provider";
 
+import { usePathname } from "next/navigation";
+
 export function Navbar() {
     const { user } = useAuth();
     const { cartCount } = useCart();
+    const pathname = usePathname();
+    const router = useRouter();
 
     const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    const [searchQuery, setSearchQuery] = React.useState("");
 
     // ✅ FIX: prevent hydration mismatch
     const [mounted, setMounted] = React.useState(false);
     React.useEffect(() => {
         setMounted(true);
     }, []);
+
+    // Don't show navbar on admin pages
+    if (pathname?.startsWith("/admin")) return null;
 
     return (
         <header className="sticky top-0 z-50 w-full border-b border-circuit-border bg-circuit-bg/80 backdrop-blur supports-[backdrop-filter]:bg-circuit-bg/60">
@@ -56,11 +65,20 @@ export function Navbar() {
                 <div className="flex items-center space-x-2 sm:space-x-4">
                     <div className="relative hidden lg:block w-[250px]">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-circuit-text-muted" />
-                        <input
-                            type="search"
-                            placeholder="Search components..."
-                            className="h-9 w-full rounded-md border border-circuit-border bg-circuit-card pl-9 pr-4 text-sm text-circuit-text placeholder:text-circuit-text-muted focus:border-circuit-green focus:outline-none focus:ring-1 focus:ring-circuit-green transition-all"
-                        />
+                        <form onSubmit={(e) => {
+                            e.preventDefault();
+                            if (searchQuery.trim()) {
+                                router.push(`/product?search=${encodeURIComponent(searchQuery.trim())}`);
+                            }
+                        }}>
+                            <input
+                                type="search"
+                                placeholder="Search by name or ID..."
+                                className="h-9 w-full rounded-md border border-circuit-border bg-circuit-card pl-9 pr-4 text-sm text-circuit-text placeholder:text-circuit-text-muted focus:border-circuit-green focus:outline-none focus:ring-1 focus:ring-circuit-green transition-all"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                            />
+                        </form>
                     </div>
 
                     <div className="hidden sm:flex items-center space-x-2">
@@ -114,11 +132,21 @@ export function Navbar() {
                     <nav className="flex flex-col space-y-4">
                         <div className="relative w-full mb-4">
                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-circuit-text-muted" />
-                            <input
-                                type="search"
-                                placeholder="Search components..."
-                                className="h-9 w-full rounded-md border border-circuit-border bg-circuit-card pl-9 pr-4 text-sm text-circuit-text placeholder:text-circuit-text-muted focus:border-circuit-green focus:outline-none focus:ring-1 focus:ring-circuit-green transition-all"
-                            />
+                            <form onSubmit={(e) => {
+                                e.preventDefault();
+                                if (searchQuery.trim()) {
+                                    router.push(`/product?search=${encodeURIComponent(searchQuery.trim())}`);
+                                    setIsMobileMenuOpen(false);
+                                }
+                            }}>
+                                <input
+                                    type="search"
+                                    placeholder="Search by name or ID..."
+                                    className="h-9 w-full rounded-md border border-circuit-border bg-circuit-card pl-9 pr-4 text-sm text-circuit-text placeholder:text-circuit-text-muted focus:border-circuit-green focus:outline-none focus:ring-1 focus:ring-circuit-green transition-all"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                />
+                            </form>
                         </div>
 
                         {[

@@ -4,14 +4,18 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 interface User {
-    name: string;
-    email: string;
+    token: string;
+    expiration: string;
+    role: string;
+    userId: number;
+    userName: string;
+    email?: string; // Optional as it's not in LoginResponseDTO directly but might be useful
 }
 
 interface AuthContextType {
     user: User | null;
     isLoading: boolean;
-    login: (email: string, name: string) => void;
+    login: (userData: User) => void;
     logout: () => void;
 }
 
@@ -31,11 +35,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setIsLoading(false);
     }, []);
 
-    const login = (email: string, name: string) => {
-        const newUser = { email, name };
-        localStorage.setItem("circuit_user", JSON.stringify(newUser));
-        setUser(newUser);
-        router.push("/account");
+    const login = (userData: User) => {
+        localStorage.setItem("circuit_user", JSON.stringify(userData));
+        setUser(userData);
+        if (userData.role === "Admin") {
+            router.push("/admin");
+        } else {
+            router.push("/account");
+        }
     };
 
     const logout = () => {
