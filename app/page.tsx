@@ -2,10 +2,11 @@ import { Button } from "@/components/ui/Button";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { ArrowRight, Cpu, Zap, Activity, Box } from "lucide-react";
 import Link from "next/link";
-import { PRODUCTS } from "@/lib/data";
+import { productApi } from "@/lib/api";
 
-export default function Home() {
-  const featuredProducts = PRODUCTS.slice(0, 4);
+export default async function Home() {
+  const trendingProducts = await productApi.getTrending(4);
+  const featuredProducts = trendingProducts.responseObj || [];
 
   return (
     <div className="flex flex-col gap-16 w-full">

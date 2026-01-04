@@ -1,23 +1,42 @@
 "use client";
 
-import { use } from "react"; // <-- import use
+import { use, useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
-import { PRODUCTS } from "@/lib/data";
+import { getProductByIdForFrontend, Product } from "@/lib/api";
 import { ArrowLeft, Check, ShoppingCart, Truck, Shield } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useCart } from "@/components/cart-provider";
-import { useState } from "react";
 
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params); // <-- unwrap the promise
-    const product = PRODUCTS.find((p) => p.id === Number(id)); // convert to number
+    const { id } = use(params);
+    const [product, setProduct] = useState<Product | null>(null);
+    const [loading, setLoading] = useState(true);
     const { addItem } = useCart();
     const [isAdded, setIsAdded] = useState(false);
 
+    useEffect(() => {
+        async function fetchProduct() {
+            try {
+                const p = await getProductByIdForFrontend(Number(id));
+                console.log("Product data : " , p);
+                setProduct(p || null);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchProduct();
+    }, [id]);
+
+    if (loading) {
+        return <div className="container py-12 px-4 md:px-8 text-center">Loading...</div>;
+    }
+
     if (!product) {
-        notFound();
+        return <div className="container py-12 px-4 md:px-8 text-center">Product not found</div>;
     }
 
     const handleAddToCart = () => {
@@ -39,7 +58,9 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                         src={product.image}
                         alt={product.name}
                         fill
+                        sizes="(max-width: 768px) 100vw, 50vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-700"
+                        unoptimized
                     />
                 </div>
 
@@ -83,18 +104,28 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                     </div>
 
                     {/* Specs */}
-                    {product.specs && (
+                    {/* Specs Section */}
+                    {product.specs && product.specs.length > 0 ? (
                         <div className="mt-8 border border-circuit-border rounded-xl overflow-hidden">
                             <table className="w-full text-sm">
                                 <tbody className="divide-y divide-circuit-border">
                                     {product.specs.map((spec, index) => (
                                         <tr key={index} className="bg-circuit-bg/50">
-                                            <td className="p-3 text-circuit-text-muted">{spec.label}</td>
-                                            <td className="p-3 font-mono text-right">{spec.value}</td>
+                                            {/* Ensure these keys match your API response exactly */}
+                                            <td className="p-3 text-circuit-text-muted font-medium">
+                                                {spec.label}
+                                            </td>
+                                            <td className="p-3 font-mono text-right">
+                                                {spec.value}
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
+                        </div>
+                    ) : (
+                        <div className="mt-8 text-sm text-circuit-text-muted italic">
+                            No technical specifications available.
                         </div>
                     )}
                 </div>

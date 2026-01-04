@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { SlidersHorizontal, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
@@ -11,6 +12,22 @@ interface FilterSidebarProps {
 
 export function FilterSidebar({ categoryFilter, categories }: FilterSidebarProps) {
     const [isOpen, setIsOpen] = React.useState(false);
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const [minPrice, setMinPrice] = React.useState(searchParams.get("minPrice") || "");
+    const [maxPrice, setMaxPrice] = React.useState(searchParams.get("maxPrice") || "");
+
+    const handlePriceApply = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (minPrice) params.set("minPrice", minPrice);
+        else params.delete("minPrice");
+        
+        if (maxPrice) params.set("maxPrice", maxPrice);
+        else params.delete("maxPrice");
+
+        router.push(`/product?${params.toString()}`);
+    };
 
     return (
         <aside className="w-full md:w-64 space-y-8 h-fit md:sticky md:top-24">
@@ -40,52 +57,54 @@ export function FilterSidebar({ categoryFilter, categories }: FilterSidebarProps
                 <div>
                     <h3 className="mb-4 font-semibold text-circuit-text">Categories</h3>
                     <div className="space-y-2">
-                        <a href="/product" className={`block text-sm ${!categoryFilter ? 'text-circuit-green font-bold' : 'text-circuit-text-muted hover:text-circuit-green'}`}>
+                        <Button 
+                            variant="link" 
+                            className={`p-0 h-auto block text-sm ${!categoryFilter ? 'text-circuit-green font-bold' : 'text-circuit-text-muted hover:text-circuit-green'}`}
+                            onClick={() => router.push('/product')}
+                        >
                             All Products
-                        </a>
+                        </Button>
                         {categories.map((cat) => (
-                            <a
+                            <Button
                                 key={cat}
-                                href={`/product?category=${cat}`}
-                                className={`block text-sm ${categoryFilter === cat ? 'text-circuit-green font-bold' : 'text-circuit-text-muted hover:text-circuit-green'}`}
+                                variant="link"
+                                onClick={() => router.push(`/product?category=${cat}`)}
+                                className={`p-0 h-auto block text-sm ${categoryFilter === cat ? 'text-circuit-green font-bold' : 'text-circuit-text-muted hover:text-circuit-green'}`}
                             >
                                 {cat}
-                            </a>
+                            </Button>
                         ))}
                     </div>
                 </div>
 
-                {/* Applications (Mockup) */}
-                <div>
-                    <h3 className="mb-4 font-semibold text-circuit-text">Application</h3>
-                    <div className="space-y-2">
-                        <label className="flex items-center space-x-2 text-sm text-circuit-text-muted hover:text-circuit-green cursor-pointer">
-                            <input type="checkbox" className="rounded border-circuit-border bg-circuit-card text-circuit-green focus:ring-circuit-green" />
-                            <span>Prototyping</span>
-                        </label>
-                        <label className="flex items-center space-x-2 text-sm text-circuit-text-muted hover:text-circuit-green cursor-pointer">
-                            <input type="checkbox" className="rounded border-circuit-border bg-circuit-card text-circuit-green focus:ring-circuit-green" />
-                            <span>Industrial</span>
-                        </label>
-                    </div>
-                </div>
-
-                {/* Price Range (Mockup) */}
+                {/* Price Range */}
                 <div>
                     <h3 className="mb-4 font-semibold text-circuit-text">Price Range</h3>
                     <div className="space-y-4">
                         <div className="flex items-center space-x-2">
                             <div className="relative w-full">
                                 <span className="absolute left-2 top-1.5 text-xs text-circuit-text-muted">$</span>
-                                <input type="number" placeholder="0" className="w-full rounded bg-circuit-card border border-circuit-border pl-5 pr-2 py-1 text-sm outline-none focus:border-circuit-green" />
+                                <input 
+                                    type="number" 
+                                    placeholder="0" 
+                                    value={minPrice}
+                                    onChange={(e) => setMinPrice(e.target.value)}
+                                    className="w-full rounded bg-circuit-card border border-circuit-border pl-5 pr-2 py-1 text-sm outline-none focus:border-circuit-green" 
+                                />
                             </div>
                             <span className="text-circuit-text-muted">-</span>
                             <div className="relative w-full">
                                 <span className="absolute left-2 top-1.5 text-xs text-circuit-text-muted">$</span>
-                                <input type="number" placeholder="1000" className="w-full rounded bg-circuit-card border border-circuit-border pl-5 pr-2 py-1 text-sm outline-none focus:border-circuit-green" />
+                                <input 
+                                    type="number" 
+                                    placeholder="1000" 
+                                    value={maxPrice}
+                                    onChange={(e) => setMaxPrice(e.target.value)}
+                                    className="w-full rounded bg-circuit-card border border-circuit-border pl-5 pr-2 py-1 text-sm outline-none focus:border-circuit-green" 
+                                />
                             </div>
                         </div>
-                        <Button variant="outline" size="sm" className="w-full">Apply</Button>
+                        <Button variant="outline" size="sm" className="w-full" onClick={handlePriceApply}>Apply</Button>
                     </div>
                 </div>
             </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Product } from "@/lib/data";
+import { Product } from "@/lib/api";
 import { ShoppingCart, Plus } from "lucide-react";
 import { Button } from "./Button";
 import { useCart } from "@/components/cart-provider";
@@ -24,23 +24,33 @@ export function ProductCard({ product }: ProductCardProps) {
             <div className="relative h-full overflow-hidden rounded-xl border border-circuit-border bg-circuit-card transition-all duration-300 hover:border-circuit-green/50 hover:shadow-lg hover:shadow-circuit-green/5 flex flex-col">
                 {/* Image Container */}
                 <div className="relative aspect-[4/3] w-full overflow-hidden bg-circuit-bg">
-                    <Image
-                        src={product.image}
-                        alt={product.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Button
-                            variant="secondary"
-                            size="sm"
-                            className="h-8 w-8 p-0 rounded-full bg-circuit-card/80 backdrop-blur border border-circuit-border hover:bg-circuit-green hover:text-white"
-                            onClick={handleAddToCart}
-                        >
-                            <Plus className="h-4 w-4" />
-                        </Button>
-                    </div>
-                </div>
+    {product.image ? (
+        <Image
+            src={product.image}
+            alt={product.name}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            unoptimized
+        />
+    ) : (
+        <div className="flex items-center justify-center w-full h-full text-circuit-text-muted bg-circuit-bg">
+            No Image
+        </div>
+    )}
+
+    <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+        <Button
+            variant="secondary"
+            size="sm"
+            className="h-8 w-8 p-0 rounded-full bg-circuit-card/80 backdrop-blur border border-circuit-border hover:bg-circuit-green hover:text-white"
+            onClick={handleAddToCart}
+        >
+            <Plus className="h-4 w-4" />
+        </Button>
+    </div>
+</div>
+
 
                 {/* Content */}
                 <div className="flex flex-1 flex-col p-4">
@@ -60,6 +70,6 @@ export function ProductCard({ product }: ProductCardProps) {
                     </div>
                 </div>
             </div>
-        </Link>
+        </Link >
     );
 }
