@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/Button";
 import { ProductCard } from "@/components/ui/ProductCard";
 import { ArrowRight, Cpu, Zap, Activity, Box } from "lucide-react";
 import Link from "next/link";
-import { getProductsForFrontend } from "@/lib/api"; // ✅ FIX: Import transformer
+import { getProductsForFrontend } from "@/lib/api";
 import type { Product } from "@/lib/api"; // ✅ Ensure correct type
 
 export default async function Home() {
@@ -10,7 +10,31 @@ export default async function Home() {
   // const trendingProducts = await productApi.getTrending(4);
 
   // ✅ USE frontend-safe transformed products
-  const featuredProducts: Product[] = await getProductsForFrontend();
+  const allProducts: Product[] = await getProductsForFrontend();
+  const byCat = (regex: RegExp, count: number) =>
+    allProducts.filter(p => regex.test(p.category)).slice(0, count);
+  const micro = byCat(/microcontroller/i, 3);
+  const sensors = byCat(/sensor/i, 3);
+  const tools = byCat(/tool/i, 2);
+  const idSet = new Set<number>();
+  const featuredProducts: Product[] = [];
+  [micro, sensors, tools].forEach(group => {
+    group.forEach(p => {
+      if (!idSet.has(p.id)) {
+        idSet.add(p.id);
+        featuredProducts.push(p);
+      }
+    });
+  });
+  if (featuredProducts.length < 8) {
+    for (const p of allProducts) {
+      if (featuredProducts.length >= 8) break;
+      if (!idSet.has(p.id)) {
+        idSet.add(p.id);
+        featuredProducts.push(p);
+      }
+    }
+  }
 
   return (
     <div className="flex flex-col gap-16 w-full">
