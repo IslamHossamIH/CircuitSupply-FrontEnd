@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, use } from "react";
 import { Button } from "@/components/ui/Button";
 import { getProductByIdForFrontend, Product } from "@/lib/api";
 import { ArrowLeft, Check, ShoppingCart, Truck, Shield } from "lucide-react";
@@ -9,8 +9,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useCart } from "@/components/cart-provider";
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
-    const { id } = params;
+export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
+    const { id } = use(params);
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const { addItem } = useCart();
@@ -18,8 +18,15 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
 
     useEffect(() => {
         async function fetchProduct() {
+            const numericId = Number(id);
+            if (isNaN(numericId)) {
+                console.error("Invalid product ID:", id);
+                setLoading(false);
+                return;
+            }
+
             try {
-                const p = await getProductByIdForFrontend(Number(id));
+                const p = await getProductByIdForFrontend(numericId);
                 console.log("Product data : " , p);
                 setProduct(p || null);
             } catch (error) {
@@ -28,7 +35,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                 setLoading(false);
             }
         }
-        fetchProduct();
+        if (id) fetchProduct();
     }, [id]);
 
     if (loading) {
