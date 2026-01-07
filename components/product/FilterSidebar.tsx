@@ -18,15 +18,19 @@ export function FilterSidebar({ categoryFilter, categories }: FilterSidebarProps
     const [minPrice, setMinPrice] = React.useState(searchParams.get("minPrice") || "");
     const [maxPrice, setMaxPrice] = React.useState(searchParams.get("maxPrice") || "");
 
-    const handlePriceApply = () => {
+    // Helper to update the params while preserving others (and resetting to page 1)
+    function updateParams(paramsObj: Record<string, string | undefined>) {
         const params = new URLSearchParams(searchParams.toString());
-        if (minPrice) params.set("minPrice", minPrice);
-        else params.delete("minPrice");
-        
-        if (maxPrice) params.set("maxPrice", maxPrice);
-        else params.delete("maxPrice");
-
+        Object.entries(paramsObj).forEach(([k, v]) => {
+            if (v === undefined || v === "") params.delete(k);
+            else params.set(k, v);
+        });
+        params.set("page", "1"); // Always reset pagination when changing filters
         router.push(`/product?${params.toString()}`);
+    }
+
+    const handlePriceApply = () => {
+        updateParams({ minPrice, maxPrice });
     };
 
     return (
@@ -60,7 +64,7 @@ export function FilterSidebar({ categoryFilter, categories }: FilterSidebarProps
                         <Button 
                             variant="link" 
                             className={`p-0 h-auto block text-sm ${!categoryFilter ? 'text-circuit-green font-bold' : 'text-circuit-text-muted hover:text-circuit-green'}`}
-                            onClick={() => router.push('/product')}
+                            onClick={() => updateParams({ category: undefined })}
                         >
                             All Products
                         </Button>
@@ -68,7 +72,7 @@ export function FilterSidebar({ categoryFilter, categories }: FilterSidebarProps
                             <Button
                                 key={cat}
                                 variant="link"
-                                onClick={() => router.push(`/product?category=${cat}`)}
+                                onClick={() => updateParams({ category: cat })}
                                 className={`p-0 h-auto block text-sm ${categoryFilter === cat ? 'text-circuit-green font-bold' : 'text-circuit-text-muted hover:text-circuit-green'}`}
                             >
                                 {cat}

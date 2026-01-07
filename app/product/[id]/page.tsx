@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { getProductByIdForFrontend, Product } from "@/lib/api";
 import { ArrowLeft, Check, ShoppingCart, Truck, Shield } from "lucide-react";
@@ -9,8 +9,8 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { useCart } from "@/components/cart-provider";
 
-export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
-    const { id } = use(params);
+export default function ProductDetailPage({ params }: { params: { id: string } }) {
+    const { id } = params;
     const [product, setProduct] = useState<Product | null>(null);
     const [loading, setLoading] = useState(true);
     const { addItem } = useCart();
